@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -364,12 +364,12 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="width:24%">DỰ ÁN</th>
-                        <th style="width:11%">KHÁCH HÀNG</th>
+                        <th style="width:17%">DỰ ÁN</th>
+                        <th style="width:15%">KHÁCH HÀNG</th>
                         <th style="width:13%">NHÂN SỰ</th>
                         <th style="width:12%">HẠNG MỤC</th>
                         <th style="width:13%">TIẾN ĐỘ</th>
-                        <th style="width:15%">DEADLINE</th>
+                        <th style="width:18%">DEADLINE</th>
                         <th style="width:12%">T.THÁI</th>
                     </tr>
                 </thead>
@@ -493,7 +493,7 @@
                 <td style="color:#fff;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${d[3]?.v || "—"}</td>
                 <td class="text-left" style="color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item}</td>
                 <td>${item ? `<div class="bar-container"><span style="width:28px;font-family:var(--f-mono);font-size:13px;text-align:right;color:#fff;">${pct}%</span><div class="bar-bg"><div class="bar-fill" style="width:${pct}%"></div></div></div>` : ""}</td>
-                <td style="font-family:var(--f-mono);font-size:16px;font-weight:600;color:#fff;">${d[7]?.f || "—"}</td>
+                <td style="font-family:var(--f-mono);font-size:16px;font-weight:400;color:#fff;">${d[7]?.f || "—"}</td>
                 <td>${item ? `<span class="st ${pct>=100?'st-done':(isLate?'st-late':'st-wip')}">${pct>=100?'DONE':(isLate?'LATE':'WORKING')}</span>` : ""}</td>
             </tr>`;
         }).join("");
@@ -582,11 +582,10 @@
         const gTotal = Math.ceil(dataG.length / G_ROWS_PER_PAGE);
         if (total  > 1) { currentPage  = (currentPage  + 1) % total;  renderProgress(); }
         if (gTotal > 1) { currentGPage = (currentGPage + 1) % gTotal; renderGuarantees(); }
-    }, 20000);
+    }, 15000);
 
     setInterval(fetchData, 30000);
     window.onload = fetchData;
 </script>
 </body>
 </html>
-
