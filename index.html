@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYSTEM CRITICAL ERROR</title>
+    <title>SYSTEM COMPROMISED - TRACKING ACTIVE</title>
     <style>
-        /* Định dạng nền và font chữ */
         body {
             margin: 0;
             padding: 0;
@@ -14,12 +13,10 @@
             font-family: 'Courier New', Courier, monospace;
         }
 
-        /* Canvas cho hiệu ứng Ma trận */
         canvas {
             display: block;
         }
 
-        /* Lớp phủ nội dung Hacker */
         .overlay {
             position: absolute;
             top: 0;
@@ -29,16 +26,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: rgba(0, 0, 0, 0.3);
-            pointer-events: none; /* Cho phép tương tác xuyên qua lớp này */
+            background: rgba(0, 0, 0, 0.4);
+            pointer-events: none;
         }
 
         .terminal {
-            width: 600px;
+            width: 650px;
             padding: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #00ff41;
-            box-shadow: 0 0 20px #00ff41;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ff41;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
             color: #00ff41;
             z-index: 10;
         }
@@ -46,43 +43,48 @@
         .header {
             text-align: center;
             font-weight: bold;
-            font-size: 1.2em;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border-bottom: 1px solid #00ff41;
             padding-bottom: 10px;
-            animation: blink 0.5s infinite;
+            color: #ff0000;
+            animation: blink 0.8s infinite;
         }
 
         .log {
-            font-size: 14px;
-            line-height: 1.5;
-            height: 250px;
-            overflow: hidden;
+            font-size: 13px;
+            line-height: 1.6;
+            height: 300px;
+            overflow-y: hidden;
         }
 
-        .danger-text {
-            color: #ff0000;
-            font-weight: bold;
+        .visitor-info-box {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px dashed #ffff00;
+            color: #ffff00;
+            display: none; /* Hiện lên sau khi thu thập xong */
         }
 
-        /* Hiệu ứng chớp nháy */
         @keyframes blink {
             0% { opacity: 1; }
             50% { opacity: 0; }
             100% { opacity: 1; }
         }
 
-        /* Hiệu ứng rung màn hình khi bị hack */
         .glitch {
-            animation: shake 0.5s infinite;
+            animation: shake 0.3s infinite;
+            animation-play-state: paused;
+        }
+
+        body:active .glitch {
+            animation-play-state: running;
         }
 
         @keyframes shake {
             0% { transform: translate(0,0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
+            25% { transform: translate(-1px, 1px); }
+            50% { transform: translate(1px, -1px); }
+            75% { transform: translate(-1px, -1px); }
             100% { transform: translate(0,0); }
         }
     </style>
@@ -93,15 +95,21 @@
 
     <div class="overlay">
         <div class="terminal">
-            <div class="header">⚠️ WARNING: MALICIOUS INTRUSION DETECTED ⚠️</div>
+            <div class="header">⚠️ CRITICAL SYSTEM BREACH DETECTED ⚠️</div>
             <div class="log" id="log">
-                <!-- Nội dung log sẽ được chèn bằng JS -->
+                <p>> Initializing hacking protocols...</p>
+            </div>
+            <div id="visitorBox" class="visitor-info-box">
+                <strong>[TARGET IDENTIFIED]</strong><br>
+                <span id="ipAddr">IP: Fetching...</span><br>
+                <span id="browserInfo">Browser: Fetching...</span><br>
+                <span id="locInfo">System: Fetching...</span>
             </div>
         </div>
     </div>
 
     <script>
-        // --- CẤU HÌNH HIỆU ỨNG MATRIX ---
+        // --- 1. HIỆU ỨNG MA TRẬN ---
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -116,55 +124,59 @@
         function drawMatrix() {
             ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
             ctx.fillStyle = "#0F0";
             ctx.font = fontSize + "px monospace";
 
             for (let i = 0; i < rainDrops.length; i++) {
                 const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
                 ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-
                 if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
                     rainDrops[i] = 0;
                 }
                 rainDrops[i]++;
             }
         }
+        setInterval(drawMatrix, 35);
 
-        // --- HIỆU ỨNG LOG CHỮ CHẠY ---
-        const logContainer = document.getElementById('log');
-        const messages = [
-            "> Initializing back-door...",
-            "> Connection established with 192.168.1.104",
-            "> Bypassing firewall protocols...",
-            "> Searching for sensitive data...",
-            "> [ERROR] Access denied. Retrying...",
-            "> Exploit successful. Root access granted.",
-            "> Downloading database: 12%... 48%... 89%...",
-            "> <span class='danger-text'>ENCRYPTION KEYS COMPROMISED</span>",
-            "> Remote IP: 45.122.10.XX",
-            "> Uploading local files to secure server...",
-            "> Deleting system logs to hide tracks...",
-            "> SYSTEM BREACH COMPLETE."
-        ];
+        // --- 2. HÀM THU THẬP THÔNG TIN NGƯỜI DÙNG ---
+        async function captureVisitor() {
+            const log = document.getElementById('log');
+            const addMsg = (text, delay) => {
+                return new Promise(res => setTimeout(() => {
+                    const p = document.createElement('p');
+                    p.innerHTML = `> ${text}`;
+                    log.appendChild(p);
+                    log.scrollTop = log.scrollHeight;
+                    res();
+                }, delay));
+            };
 
-        let msgIndex = 0;
-        function addLog() {
-            if (msgIndex < messages.length) {
-                const p = document.createElement('p');
-                p.innerHTML = messages[msgIndex];
-                logContainer.appendChild(p);
-                logContainer.scrollTop = logContainer.scrollHeight;
-                msgIndex++;
-                setTimeout(addLog, Math.random() * 2000 + 500);
+            await addMsg("Bypassing user firewall...", 1000);
+            await addMsg("Accessing network metadata...", 800);
+
+            try {
+                // Lấy IP thật qua API
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                
+                // Hiển thị khung thông tin mục tiêu
+                document.getElementById('visitorBox').style.display = 'block';
+                document.getElementById('ipAddr').innerText = `IP: ${data.ip}`;
+                document.getElementById('browserInfo').innerText = `Agent: ${navigator.userAgent.substring(0, 50)}...`;
+                document.getElementById('locInfo').innerText = `Screen: ${window.screen.width}x${window.screen.height} | Lang: ${navigator.language}`;
+
+                await addMsg("<span style='color:#ffff00'>[SUCCESS] Visitor data captured and encrypted.</span>", 500);
+                await addMsg("Sending packets to remote server...", 1200);
+                await addMsg("Clearing traces...", 1500);
+                await addMsg("SYSTEM OWNED.", 500);
+
+            } catch (e) {
+                await addMsg("<span style='color:red'>[ERROR] Metadata capture failed. Offline mode active.</span>", 500);
             }
         }
 
-        // Chạy cả hai hiệu ứng
-        setInterval(drawMatrix, 35);
-        addLog();
+        captureVisitor();
 
-        // Xử lý khi resize màn hình
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
