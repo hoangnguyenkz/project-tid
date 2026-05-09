@@ -583,7 +583,6 @@
         const staff = {}, cust = {};
         dataP.forEach(r => {
             const c = r.c;
-            if (!c[2]?.v) return; // bỏ qua hàng không có HẠNG MỤC
             const s = c[3]?.v;
             if (s && s.trim() && s !== "—") staff[s] = (staff[s] || 0) + 1;
             const cu = c[4]?.v;
